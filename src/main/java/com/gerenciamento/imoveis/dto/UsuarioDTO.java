@@ -2,11 +2,20 @@ package com.gerenciamento.imoveis.dto;
 
 import java.util.UUID;
 
-import com.gerenciamento.imoveis.entity.TipoUsuario;
+import com.gerenciamento.imoveis.entity.Usuario;
 
-public record UsuarioDTO(
-        UUID id,
-        String nome,
-        String email,
-        TipoUsuario tipoUsuario
-) {}
+import lombok.Data;
+
+@Data
+public class UsuarioDTO {
+
+    private UUID id;
+    private String nome;
+    private String email;
+
+    public UsuarioDTO(Usuario usuario) {
+        this.id = usuario.getId();
+        this.nome = usuario.getNome();
+        this.email = usuario.getEmail();
+    }
+}
