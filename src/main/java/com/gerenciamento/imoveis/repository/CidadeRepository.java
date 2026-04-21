@@ -1,0 +1,15 @@
+package com.gerenciamento.imoveis.repository;
+
+import com.gerenciamento.imoveis.entity.Cidade;
+import com.gerenciamento.imoveis.entity.Estado;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+public interface CidadeRepository extends JpaRepository<Cidade, String> {
+    Optional<Cidade> findByNomeAndEstado(String nome, Estado estado);
+    List<Cidade> findByEstado(Estado estado);
+}

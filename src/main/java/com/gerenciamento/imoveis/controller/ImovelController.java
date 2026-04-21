@@ -30,14 +30,16 @@ public class ImovelController {
     }
 
     @PostMapping
-    public ImovelDTO criar(@RequestBody Imovel imovel) {
+    public ImovelDTO criar(@RequestBody ImovelDTO imovelDTO) {
+        Imovel imovel = service.dtoToEntity(imovelDTO);
         Imovel saved = service.save(imovel);
         return new ImovelDTO(saved);
     }
 
     @PutMapping("/{id}")
-    public ImovelDTO atualizar(@PathVariable String id, @RequestBody Imovel imovel) {
-        imovel.setId(id);
+    public ImovelDTO atualizar(@PathVariable String id, @RequestBody ImovelDTO imovelDTO) {
+        imovelDTO.setId(id);
+        Imovel imovel = service.dtoToEntity(imovelDTO);
         Imovel saved = service.save(imovel);
         return new ImovelDTO(saved);
     }

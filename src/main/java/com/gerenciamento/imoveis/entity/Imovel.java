@@ -12,11 +12,11 @@ public class Imovel {
 
     private String codigo;
 
-    private String endereco;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "endereco_id", nullable = false)
+    private Endereco endereco;
 
-    private String cidade;
-
-    private String estado;
+    private String descricao;
 
     private BigDecimal valor;
 
@@ -35,17 +35,26 @@ public class Imovel {
     // Constructors
     public Imovel() {}
 
-    public Imovel(String id, String codigo, String endereco, String cidade, String estado,
+    public Imovel(String id, String codigo, Endereco endereco, String descricao,
                   BigDecimal valor, BigDecimal area, Etapa etapaAtual, Usuario responsavel, String status) {
         this.id = id;
         this.codigo = codigo;
         this.endereco = endereco;
-        this.cidade = cidade;
-        this.estado = estado;
+        this.descricao = descricao;
         this.valor = valor;
         this.area = area;
         this.etapaAtual = etapaAtual;
         this.responsavel = responsavel;
+        this.status = status;
+    }
+
+    public Imovel(String codigo, Endereco endereco, String descricao,
+                  BigDecimal valor, BigDecimal area, String status) {
+        this.codigo = codigo;
+        this.endereco = endereco;
+        this.descricao = descricao;
+        this.valor = valor;
+        this.area = area;
         this.status = status;
     }
 
@@ -66,28 +75,20 @@ public class Imovel {
         this.codigo = codigo;
     }
 
-    public String getEndereco() {
+    public Endereco getEndereco() {
         return endereco;
     }
 
-    public void setEndereco(String endereco) {
+    public void setEndereco(Endereco endereco) {
         this.endereco = endereco;
     }
 
-    public String getCidade() {
-        return cidade;
+    public String getDescricao() {
+        return descricao;
     }
 
-    public void setCidade(String cidade) {
-        this.cidade = cidade;
-    }
-
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
     public BigDecimal getValor() {
