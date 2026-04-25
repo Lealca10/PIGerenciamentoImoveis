@@ -1,5 +1,6 @@
 package com.gerenciamento.imoveis.service;
 
+import com.gerenciamento.imoveis.dto.EnderecoDTO;
 import com.gerenciamento.imoveis.dto.ImovelDTO;
 import com.gerenciamento.imoveis.entity.*;
 import com.gerenciamento.imoveis.repository.ImovelRepository;
@@ -18,6 +19,7 @@ public class ImovelService {
     private final RuaService ruaService;
     private final CidadeService cidadeService;
     private final EstadoService estadoService;
+    private final BairroService bairroService;
 
     public List<Imovel> findAll() {
         return imovelRepository.findAll();
@@ -45,35 +47,78 @@ public class ImovelService {
     public Imovel dtoToEntity(ImovelDTO dto) {
         Imovel imovel = new Imovel();
         imovel.setId(dto.getId());
-        imovel.setCodigo(dto.getCodigo());
-        imovel.setDescricao(dto.getDescricao());
-        imovel.setValor(dto.getValor());
+        imovel.setTipoImovel(dto.getTipoImovel());
         imovel.setArea(dto.getArea());
-        imovel.setStatus(dto.getStatus());
-        
-        // Se já existe um endereço, apenas buscar e atualizar
-        if (dto.getEnderecoId() != null && !dto.getEnderecoId().isEmpty()) {
-            Endereco endereco = enderecoService.findById(dto.getEnderecoId())
-                    .orElseThrow(() -> new RuntimeException("Endereço não encontrado"));
-            imovel.setEndereco(endereco);
-        } else if (dto.getRua() != null && !dto.getRua().isEmpty() && 
-                   dto.getEstado() != null && !dto.getEstado().isEmpty() &&
-                   dto.getCidade() != null && !dto.getCidade().isEmpty()) {
-            // Criar novo endereço a partir dos dados do DTO
-            Estado estado = estadoService.findBySigla(dto.getEstado())
-                    .orElseThrow(() -> new RuntimeException("Estado não encontrado"));
-            
-            Cidade cidade = cidadeService.findByNomeAndEstado(dto.getCidade(), estado)
-                    .orElseThrow(() -> new RuntimeException("Cidade não encontrada"));
-            
-            Rua rua = ruaService.findByNomeAndCepAndCidade(dto.getRua(), dto.getCep(), cidade)
-                    .orElseThrow(() -> new RuntimeException("Rua não encontrada"));
-            
-            Endereco endereco = new Endereco(rua, dto.getNumero(), dto.getComplemento());
+        imovel.setQuartos(dto.getQuartos());
+        imovel.setBanheiros(dto.getBanheiros());
+        imovel.setVagasGaragem(dto.getVagasGaragem());
+        imovel.setValorAvaliacao(dto.getValorAvaliacao());
+        imovel.setDataAvaliacao(dto.getDataAvaliacao());
+        imovel.setNumeroMatricula(dto.getNumeroMatricula());
+        imovel.setCartorioRegistro(dto.getCartorioRegistro());
+        imovel.setDescricao(dto.getDescricao());
+        imovel.setFotosImovel(dto.getFotosImovel());
+
+        EnderecoDTO enderecoDTO = dto.getEndereco();
+        if (enderecoDTO != null) {
+            Rua rua = null;
+            if (enderecoDTO.getRuaId() != null && !enderecoDTO.getRuaId().isEmpty()) {
+                rua = ruaService.findById(enderecoDTO.getRuaId())
+                        .orElseThrow(() -> new RuntimeException("Rua não encontrada"));
+            } else if (enderecoDTO.getRuaNome() != null && !enderecoDTO.getRuaNome().isEmpty() &&
+                       enderecoDTO.getCep() != null && !enderecoDTO.getCep().isEmpty()) {
+                rua = ruaService.findByNomeAndCep(enderecoDTO.getRuaNome(), enderecoDTO.getCep())
+                        .orElseGet(() -> ruaService.save(new Rua(enderecoDTO.getRuaNome(), enderecoDTO.getCep())));
+            } else {
+                throw new RuntimeException("Rua não informada");
+            }
+
+            Bairro bairro = null;
+            if (enderecoDTO.getBairroId() != null && !enderecoDTO.getBairroId().isEmpty()) {
+                bairro = bairroService.findById(enderecoDTO.getBairroId())
+                        .orElseThrow(() -> new RuntimeException("Bairro não encontrado"));
+            } else if (enderecoDTO.getBairroDescricao() != null && !enderecoDTO.getBairroDescricao().isEmpty()) {
+                bairro = bairroService.findByDescricao(enderecoDTO.getBairroDescricao())
+                        .orElseGet(() -> bairroService.save(new Bairro(enderecoDTO.getBairroDescricao())));
+            } else {
+                throw new RuntimeException("Bairro não informado");
+            }
+
+            final Estado estadoFinal;
+            if (enderecoDTO.getEstadoId() != null && !enderecoDTO.getEstadoId().isEmpty()) {
+                estadoFinal = estadoService.findById(enderecoDTO.getEstadoId())
+                        .orElseThrow(() -> new RuntimeException("Estado não encontrado"));
+            } else if (enderecoDTO.getEstadoSigla() != null && !enderecoDTO.getEstadoSigla().isEmpty()) {
+                estadoFinal = estadoService.findBySigla(enderecoDTO.getEstadoSigla())
+                        .orElseGet(() -> estadoService.save(new Estado(enderecoDTO.getEstadoSigla(), enderecoDTO.getEstadoSigla())));
+            } else {
+                throw new RuntimeException("Estado não informado");
+            }
+
+            final Cidade cidadeFinal;
+            if (enderecoDTO.getCidadeId() != null && !enderecoDTO.getCidadeId().isEmpty()) {
+                cidadeFinal = cidadeService.findById(enderecoDTO.getCidadeId())
+                        .orElseThrow(() -> new RuntimeException("Cidade não encontrada"));
+            } else if (enderecoDTO.getCidadeNome() != null && !enderecoDTO.getCidadeNome().isEmpty()) {
+                cidadeFinal = cidadeService.findByNomeAndEstado(enderecoDTO.getCidadeNome(), estadoFinal)
+                        .orElseGet(() -> cidadeService.save(new Cidade(enderecoDTO.getCidadeNome(), estadoFinal)));
+            } else {
+                throw new RuntimeException("Cidade não informada");
+            }
+
+            Endereco endereco = new Endereco(
+                    enderecoDTO.getCep(),
+                    rua,
+                    bairro,
+                    cidadeFinal,
+                    estadoFinal,
+                    enderecoDTO.getNumero(),
+                    enderecoDTO.getComplemento()
+            );
             Endereco enderecoSalvo = enderecoService.save(endereco);
             imovel.setEndereco(enderecoSalvo);
         }
-        
+
         return imovel;
     }
 }

@@ -6,25 +6,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "ruas")
+@Table(name = "bairros")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Rua {
+public class Bairro {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     @Column(nullable = false)
-    private String nome;
+    private String descricao;
 
-    @Column(nullable = false, length = 9)
-    private String cep;
-
-    public Rua(String nome, String cep) {
-        this.nome = nome;
-        this.cep = cep;
+    public Bairro(String descricao) {
+        this.descricao = descricao;
     }
-    
 }

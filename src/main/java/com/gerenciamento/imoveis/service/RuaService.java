@@ -1,7 +1,6 @@
 package com.gerenciamento.imoveis.service;
 
 import com.gerenciamento.imoveis.entity.Rua;
-import com.gerenciamento.imoveis.entity.Cidade;
 import com.gerenciamento.imoveis.repository.RuaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,12 +22,8 @@ public class RuaService {
         return ruaRepository.findById(id);
     }
 
-    public Optional<Rua> findByNomeAndCepAndCidade(String nome, String cep, Cidade cidade) {
-        return ruaRepository.findByNomeAndCepAndCidade(nome, cep, cidade);
-    }
-
-    public List<Rua> findByCidade(Cidade cidade) {
-        return ruaRepository.findByCidade(cidade);
+    public Optional<Rua> findByNomeAndCep(String nome, String cep) {
+        return ruaRepository.findByNomeAndCep(nome, cep);
     }
 
     public Rua save(Rua rua) {

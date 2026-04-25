@@ -2,9 +2,7 @@ package com.gerenciamento.imoveis.controller;
 
 import com.gerenciamento.imoveis.dto.RuaDTO;
 import com.gerenciamento.imoveis.entity.Rua;
-import com.gerenciamento.imoveis.entity.Cidade;
 import com.gerenciamento.imoveis.service.RuaService;
-import com.gerenciamento.imoveis.service.CidadeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +15,6 @@ import java.util.stream.Collectors;
 public class RuaController {
 
     private final RuaService service;
-    private final CidadeService cidadeService;
 
     @GetMapping
     public List<RuaDTO> listar() {
@@ -32,19 +29,9 @@ public class RuaController {
         return new RuaDTO(rua);
     }
 
-    @GetMapping("/cidade/{cidadeId}")
-    public List<RuaDTO> buscarPorCidade(@PathVariable String cidadeId) {
-        Cidade cidade = cidadeService.findById(cidadeId).orElseThrow(() -> new RuntimeException("Cidade não encontrada"));
-        return service.findByCidade(cidade).stream()
-                .map(RuaDTO::new)
-                .collect(Collectors.toList());
-    }
-
     @PostMapping
     public RuaDTO criar(@RequestBody RuaDTO dto) {
-        Cidade cidade = cidadeService.findById(dto.getCidadeId())
-                .orElseThrow(() -> new RuntimeException("Cidade não encontrada"));
-        Rua rua = new Rua(dto.getNome(), dto.getCep(), cidade);
+        Rua rua = new Rua(dto.getNome(), dto.getCep());
         Rua saved = service.save(rua);
         return new RuaDTO(saved);
     }
@@ -54,13 +41,6 @@ public class RuaController {
         Rua rua = service.findById(id).orElseThrow(() -> new RuntimeException("Rua não encontrada"));
         rua.setNome(dto.getNome());
         rua.setCep(dto.getCep());
-        
-        if (dto.getCidadeId() != null) {
-            Cidade cidade = cidadeService.findById(dto.getCidadeId())
-                    .orElseThrow(() -> new RuntimeException("Cidade não encontrada"));
-            rua.setCidade(cidade);
-        }
-        
         Rua saved = service.save(rua);
         return new RuaDTO(saved);
     }
