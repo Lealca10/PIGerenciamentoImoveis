@@ -2,6 +2,7 @@ package com.gerenciamento.imoveis.dto;
 
 import com.gerenciamento.imoveis.entity.Imovel;
 import com.gerenciamento.imoveis.entity.TipoImovel;
+import com.gerenciamento.imoveis.entity.EtapaEnum;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -27,6 +28,11 @@ public class ImovelDTO {
     private String descricao;
     private List<String> fotosImovel = new ArrayList<>();
     private EnderecoDTO endereco;
+    private EtapaEnum etapa;
+    private String responsavelId;
+    private String clienteId;
+    private String status;
+    private Object enderecoDTO;
 
     public ImovelDTO(Imovel imovel) {
         this.id = imovel.getId();
@@ -41,6 +47,10 @@ public class ImovelDTO {
         this.cartorioRegistro = imovel.getCartorioRegistro();
         this.descricao = imovel.getDescricao();
         this.fotosImovel = imovel.getFotosImovel();
-        this.endereco = imovel.getEndereco() != null ? new EnderecoDTO(imovel.getEndereco()) : null;
+        this.enderecoDTO = imovel.getEndereco() != null ? new EnderecoDTO(imovel.getEndereco()) : null;
+        this.etapa = imovel.getEtapa();
+        this.responsavelId = imovel.getResponsavel() != null ? imovel.getResponsavel().getId().toString() : null;
+        this.clienteId = imovel.getCliente() != null ? imovel.getCliente().getId() : null;
+        this.status = imovel.getStatus();
     }
 }

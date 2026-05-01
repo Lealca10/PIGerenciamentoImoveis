@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +21,8 @@ public class ImovelService {
     private final CidadeService cidadeService;
     private final EstadoService estadoService;
     private final BairroService bairroService;
+    private final UsuarioService usuarioService;
+    private final ClienteService clienteService;
 
     public List<Imovel> findAll() {
         return imovelRepository.findAll();
@@ -118,6 +121,31 @@ public class ImovelService {
             Endereco enderecoSalvo = enderecoService.save(endereco);
             imovel.setEndereco(enderecoSalvo);
         }
+
+        // Configurar etapa (enum)
+        imovel.setEtapa(dto.getEtapa());
+
+        // Configurar responsável (usuário)
+        if (dto.getResponsavelId() != null && !dto.getResponsavelId().isEmpty()) {
+            try {
+                UUID usuarioId = UUID.fromString(dto.getResponsavelId());
+                Usuario responsavel = usuarioService.findById(usuarioId)
+                        .orElseThrow(() -> new RuntimeException("Usuário responsável não encontrado"));
+                imovel.setResponsavel(responsavel);
+            } catch (IllegalArgumentException e) {
+                throw new RuntimeException("ID de usuário inválido: " + dto.getResponsavelId());
+            }
+        }
+
+        // Configurar cliente
+        if (dto.getClienteId() != null && !dto.getClienteId().isEmpty()) {
+            Cliente cliente = clienteService.findById(dto.getClienteId())
+                    .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+            imovel.setCliente(cliente);
+        }
+
+        // Configurar status
+        imovel.setStatus(dto.getStatus());
 
         return imovel;
     }

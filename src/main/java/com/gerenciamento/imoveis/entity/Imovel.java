@@ -14,8 +14,6 @@ public class Imovel {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    private String codigo;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "endereco_id", nullable = false)
     private Endereco endereco;
@@ -38,13 +36,16 @@ public class Imovel {
     @Column(name = "foto")
     private List<String> fotosImovel = new ArrayList<>();
 
-    @ManyToOne
-    @JoinColumn(name = "etapa_atual")
-    private Etapa etapaAtual;
+    @Enumerated(EnumType.STRING)
+    private EtapaEnum etapa;
 
     @ManyToOne
     @JoinColumn(name = "responsavel_id")
     private Usuario responsavel;
+
+    @ManyToOne
+    @JoinColumn(name = "cliente_id")
+    private Cliente cliente;
 
     private String status;
 
@@ -57,14 +58,6 @@ public class Imovel {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getCodigo() {
-        return codigo;
-    }
-
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
     }
 
     public Endereco getEndereco() {
@@ -163,12 +156,12 @@ public class Imovel {
         this.fotosImovel = fotosImovel;
     }
 
-    public Etapa getEtapaAtual() {
-        return etapaAtual;
+    public EtapaEnum getEtapa() {
+        return etapa;
     }
 
-    public void setEtapaAtual(Etapa etapaAtual) {
-        this.etapaAtual = etapaAtual;
+    public void setEtapa(EtapaEnum etapa) {
+        this.etapa = etapa;
     }
 
     public Usuario getResponsavel() {
@@ -177,6 +170,14 @@ public class Imovel {
 
     public void setResponsavel(Usuario responsavel) {
         this.responsavel = responsavel;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 
     public String getStatus() {

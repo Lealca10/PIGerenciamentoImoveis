@@ -1,6 +1,7 @@
 package com.gerenciamento.imoveis.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,6 +36,11 @@ public class UsuarioService {
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
         return toDTO(usuario);
+    }
+
+    // 🔹 BUSCAR POR ID (retorna Optional<Usuario> para uso interno)
+    public Optional<Usuario> findById(UUID id) {
+        return repository.findById(id);
     }
 
     // 🔹 CRIAR USUÁRIO
