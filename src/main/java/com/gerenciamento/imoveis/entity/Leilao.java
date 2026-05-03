@@ -9,6 +9,7 @@ import java.time.LocalDate;
 public class Leilao {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     @ManyToOne

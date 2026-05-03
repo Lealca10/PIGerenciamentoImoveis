@@ -9,6 +9,7 @@ import java.time.LocalDate;
 public class Despesa {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     @ManyToOne
