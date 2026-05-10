@@ -1,6 +1,7 @@
 package com.gerenciamento.imoveis.controller;
 
 import com.gerenciamento.imoveis.dto.ImovelDTO;
+import com.gerenciamento.imoveis.dto.ImovelListResponse;
 import com.gerenciamento.imoveis.entity.Imovel;
 import com.gerenciamento.imoveis.service.ImovelService;
 import lombok.RequiredArgsConstructor;
@@ -17,10 +18,11 @@ public class ImovelController {
     private final ImovelService service;
 
     @GetMapping
-    public List<ImovelDTO> listar() {
-        return service.findAll().stream()
+    public ImovelListResponse listar() {
+        List<ImovelDTO> imoveis = service.findAll().stream()
                 .map(ImovelDTO::new)
                 .collect(Collectors.toList());
+        return new ImovelListResponse(imoveis.size(), imoveis);
     }
 
     @GetMapping("/{id}")
