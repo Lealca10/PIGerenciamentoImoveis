@@ -32,6 +32,10 @@ public class ImovelService {
         return imovelRepository.findById(id);
     }
 
+    public Imovel getReferenceById(String id) {
+        return imovelRepository.getReferenceById(id);
+    }
+
     public Imovel save(Imovel imovel) {
         return imovelRepository.save(imovel);
     }

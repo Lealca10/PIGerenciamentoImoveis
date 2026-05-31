@@ -22,12 +22,13 @@ public class Leilao {
 
     private BigDecimal valorMinimo;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private LeilaoStatus status;
 
     // Constructors
     public Leilao() {}
 
-    public Leilao(String id, Imovel imovel, Integer numero, LocalDate data, BigDecimal valorMinimo, String status) {
+    public Leilao(String id, Imovel imovel, Integer numero, LocalDate data, BigDecimal valorMinimo, LeilaoStatus status) {
         this.id = id;
         this.imovel = imovel;
         this.numero = numero;
@@ -77,11 +78,11 @@ public class Leilao {
         this.valorMinimo = valorMinimo;
     }
 
-    public String getStatus() {
+    public LeilaoStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(LeilaoStatus status) {
         this.status = status;
     }
 }

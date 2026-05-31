@@ -29,4 +29,8 @@ public class LeilaoService {
     public void deleteById(String id) {
         leilaoRepository.deleteById(id);
     }
+
+    public java.util.List<Leilao> findByImovelId(String imovelId) {
+        return leilaoRepository.findByImovelId(imovelId);
+    }
 }

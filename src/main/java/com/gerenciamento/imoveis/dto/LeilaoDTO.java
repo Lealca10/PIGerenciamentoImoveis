@@ -1,6 +1,7 @@
 package com.gerenciamento.imoveis.dto;
 
 import com.gerenciamento.imoveis.entity.Leilao;
+import com.gerenciamento.imoveis.entity.LeilaoStatus;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -14,7 +15,7 @@ public class LeilaoDTO {
     private Integer numero;
     private LocalDate data;
     private BigDecimal valorMinimo;
-    private String status;
+    private LeilaoStatus status;
 
     public LeilaoDTO(Leilao leilao) {
         this.id = leilao.getId();

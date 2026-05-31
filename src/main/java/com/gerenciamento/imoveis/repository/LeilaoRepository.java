@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface LeilaoRepository extends JpaRepository<Leilao, String> {
+	java.util.List<Leilao> findByImovelId(String imovelId);
 }
