@@ -1,6 +1,7 @@
 package com.gerenciamento.imoveis.controller;
 
 import com.gerenciamento.imoveis.dto.ImovelDTO;
+import com.gerenciamento.imoveis.dto.ImovelEtapaStatusRequest;
 import com.gerenciamento.imoveis.dto.ImovelListResponse;
 import com.gerenciamento.imoveis.entity.Imovel;
 import com.gerenciamento.imoveis.service.ImovelService;
@@ -43,6 +44,12 @@ public class ImovelController {
         imovelDTO.setId(id);
         Imovel imovel = service.dtoToEntity(imovelDTO);
         Imovel saved = service.save(imovel);
+        return new ImovelDTO(saved);
+    }
+
+    @PatchMapping("/{id}/etapa-status")
+    public ImovelDTO atualizarEtapaStatus(@PathVariable String id, @RequestBody ImovelEtapaStatusRequest request) {
+        Imovel saved = service.atualizarEtapaStatus(id, request.getEtapa(), request.getStatus());
         return new ImovelDTO(saved);
     }
 

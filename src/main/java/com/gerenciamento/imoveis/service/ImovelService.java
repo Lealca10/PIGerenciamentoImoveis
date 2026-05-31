@@ -40,6 +40,14 @@ public class ImovelService {
         return imovelRepository.save(imovel);
     }
 
+    public Imovel atualizarEtapaStatus(String id, EtapaEnum etapa, String status) {
+        Imovel imovel = imovelRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Imóvel não encontrado: " + id));
+        imovel.setEtapa(etapa);
+        imovel.setStatus(status);
+        return imovelRepository.save(imovel);
+    }
+
     public void deleteById(String id) {
         imovelRepository.deleteById(id);
     }
