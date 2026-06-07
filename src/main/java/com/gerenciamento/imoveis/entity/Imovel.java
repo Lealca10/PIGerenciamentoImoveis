@@ -36,6 +36,9 @@ public class Imovel {
     @Column(name = "foto")
     private List<String> fotosImovel = new ArrayList<>();
 
+    @OneToMany(mappedBy = "imovel", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Documento> documentos = new ArrayList<>();
+
     @Enumerated(EnumType.STRING)
     private EtapaEnum etapa;
 
@@ -186,5 +189,13 @@ public class Imovel {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public List<Documento> getDocumentos() {
+        return documentos;
+    }
+
+    public void setDocumentos(List<Documento> documentos) {
+        this.documentos = documentos;
     }
 }

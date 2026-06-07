@@ -1,0 +1,10 @@
+package com.gerenciamento.imoveis.entity;
+
+public enum TipoDocumento {
+    MATRICULA_ATUALIZADA,
+    LAUDO_AVALIACAO,
+    TERMO_CONSOLIDACAO_PROPRIEDADE,
+    CERTIDAO_DEBITOS_MUNICIPAIS_IPTU,
+    CERTIDAO_DEBITOS_ESTADUAIS,
+    CERTIDAO_ONUS_REAIS
+}
