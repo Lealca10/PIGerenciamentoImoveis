@@ -156,8 +156,9 @@ public class ImovelService {
             imovel.setCliente(cliente);
         }
 
-        // Configurar status
         imovel.setStatus(dto.getStatus());
+        imovel.setLatitude(dto.getLatitude());
+        imovel.setLongitude(dto.getLongitude());
 
         return imovel;
     }
