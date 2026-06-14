@@ -33,6 +33,8 @@ public class ImovelDTO {
     private String clienteId;
     private String status;
     private Object enderecoDTO;
+    private Double latitude;
+    private Double longitude;
 
     public ImovelDTO(Imovel imovel) {
         this.id = imovel.getId();
@@ -52,5 +54,7 @@ public class ImovelDTO {
         this.responsavelId = imovel.getResponsavel() != null ? imovel.getResponsavel().getId().toString() : null;
         this.clienteId = imovel.getCliente() != null ? imovel.getCliente().getId() : null;
         this.status = imovel.getStatus();
+        this.latitude = imovel.getLatitude();
+        this.longitude = imovel.getLongitude();
     }
 }
