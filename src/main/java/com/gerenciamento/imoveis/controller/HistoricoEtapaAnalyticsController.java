@@ -2,6 +2,7 @@ package com.gerenciamento.imoveis.controller;
 
 import com.gerenciamento.imoveis.dto.HistoricoDuracaoAggregateDto;
 import com.gerenciamento.imoveis.dto.HistoricoDuracaoDto;
+import com.gerenciamento.imoveis.dto.HistoricoDuracoesResponseDto;
 import com.gerenciamento.imoveis.service.HistoricoEtapaAnalyticsService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,8 +23,8 @@ public class HistoricoEtapaAnalyticsController {
     }
 
     @GetMapping("/{imovelId}/historico/duracoes")
-    public ResponseEntity<List<HistoricoDuracaoDto>> getDurations(@PathVariable String imovelId) {
-        return ResponseEntity.ok(service.getDurations(imovelId));
+    public ResponseEntity<HistoricoDuracoesResponseDto> getDurations(@PathVariable String imovelId) {
+        return ResponseEntity.ok(service.getDurationsWithTotal(imovelId));
     }
 
     @GetMapping("/{imovelId}/historico/duracoes/aggregate")

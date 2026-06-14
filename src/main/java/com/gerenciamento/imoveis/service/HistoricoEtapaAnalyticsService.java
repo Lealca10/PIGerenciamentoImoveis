@@ -6,6 +6,8 @@ import com.gerenciamento.imoveis.repository.HistoricoEtapaQueryRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
+import com.gerenciamento.imoveis.dto.HistoricoDuracoesResponseDto;
 
 @Service
 public class HistoricoEtapaAnalyticsService {
@@ -18,6 +20,15 @@ public class HistoricoEtapaAnalyticsService {
 
     public List<HistoricoDuracaoDto> getDurations(String imovelId) {
         return repo.findDurationsByImovelId(imovelId);
+    }
+
+    public HistoricoDuracoesResponseDto getDurationsWithTotal(String imovelId) {
+        List<HistoricoDuracaoDto> list = repo.findDurationsByImovelId(imovelId);
+        double total = 0.0;
+        for (HistoricoDuracaoDto d : list) {
+            if (d != null && d.getDays() != null) total += d.getDays();
+        }
+        return new HistoricoDuracoesResponseDto(list, total);
     }
 
     public List<HistoricoDuracaoAggregateDto> getAggregated(String imovelId) {
