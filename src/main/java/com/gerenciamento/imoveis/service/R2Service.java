@@ -24,15 +24,17 @@ public class R2Service {
     private String publicUrl;
 
     public String uploadFile(MultipartFile file) throws IOException {
+        byte[] bytes = file.getBytes();
         String key = UUID.randomUUID() + "_" + file.getOriginalFilename();
 
         PutObjectRequest putReq = PutObjectRequest.builder()
                 .bucket(bucket)
                 .key(key)
-                .contentType(file.getContentType())
+                .contentType(file.getContentType() != null ? file.getContentType() : "application/octet-stream")
+                .contentLength((long) bytes.length)
                 .build();
 
-        s3Client.putObject(putReq, RequestBody.fromBytes(file.getBytes()));
+        s3Client.putObject(putReq, RequestBody.fromBytes(bytes));
 
         if (publicUrl.endsWith("/")) {
             return publicUrl + key;

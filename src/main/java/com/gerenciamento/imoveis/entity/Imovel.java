@@ -1,8 +1,10 @@
 package com.gerenciamento.imoveis.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +15,10 @@ public class Imovel {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+
+    @CreationTimestamp
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "endereco_id", nullable = false)
@@ -64,6 +70,10 @@ public class Imovel {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
     public Endereco getEndereco() {

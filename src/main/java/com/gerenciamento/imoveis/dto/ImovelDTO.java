@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import java.util.List;
 public class ImovelDTO {
 
     private String id;
+    private LocalDateTime createdAt;
     private TipoImovel tipoImovel;
     private Integer area;
     private Integer quartos;
@@ -38,6 +40,7 @@ public class ImovelDTO {
 
     public ImovelDTO(Imovel imovel) {
         this.id = imovel.getId();
+        this.createdAt = imovel.getCreatedAt();
         this.tipoImovel = imovel.getTipoImovel();
         this.area = imovel.getArea();
         this.quartos = imovel.getQuartos();
