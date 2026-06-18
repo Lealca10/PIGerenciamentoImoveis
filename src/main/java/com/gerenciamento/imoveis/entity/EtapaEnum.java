@@ -8,7 +8,8 @@ public enum EtapaEnum {
     JURIDICO("Jurídico"),
     COMERCIAL("Comercial"),
     VENDA("Venda"),
-    POS_VENDA("Pós Venda");
+    POS_VENDA("Pós Venda"),
+    MANUTENCAO_PRECIFICACAO("Manutenção/Precificação");
 
     private final String descricao;
 
