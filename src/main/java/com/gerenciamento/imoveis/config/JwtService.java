@@ -2,6 +2,7 @@ package com.gerenciamento.imoveis.config;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -10,7 +11,11 @@ import java.util.Date;
 @Service
 public class JwtService {
 
-    private final SecretKey SECRET_KEY = Keys.hmacShaKeyFor("chave-secreta-super-segura-minima-32-caracteres".getBytes());
+    private final SecretKey SECRET_KEY;
+
+    public JwtService(@Value("${jwt.secret}") String secret) {
+        this.SECRET_KEY = Keys.hmacShaKeyFor(secret.getBytes());
+    }
 
     public String gerarToken(String email) {
         return Jwts.builder()

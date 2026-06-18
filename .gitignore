@@ -31,3 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Docker / Secrets ###
+.env
+certbot/conf/
+certbot/www/
