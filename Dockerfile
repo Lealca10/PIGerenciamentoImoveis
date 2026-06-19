@@ -1,17 +1,20 @@
 # ---- Build stage ----
-FROM maven:3.9.9-eclipse-temurin-21 AS build
+FROM eclipse-temurin:21-jdk AS build
 WORKDIR /app
 
+COPY mvnw .
+COPY .mvn .mvn
 COPY pom.xml .
+RUN chmod +x mvnw && ./mvnw -B dependency:go-offline
 
 COPY src ./src
-RUN mvn -B clean package -DskipTests
+RUN ./mvnw -B clean package -DskipTests
 
 # ---- Runtime stage ----
-FROM eclipse-temurin:21-jre
+FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
-RUN groupadd --system spring && useradd --system --gid spring spring
+RUN addgroup -S spring && adduser -S spring -G spring
 COPY --from=build /app/target/*.jar app.jar
 USER spring:spring
 

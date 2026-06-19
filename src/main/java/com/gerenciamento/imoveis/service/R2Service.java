@@ -17,10 +17,10 @@ public class R2Service {
     @Autowired
     private S3Client s3Client;
 
-    @Value("${storage.s3.bucket}")
+    @Value("${cloudflare.r2.bucket}")
     private String bucket;
 
-    @Value("${storage.s3.public-url}")
+    @Value("${cloudflare.r2.public-url}")
     private String publicUrl;
 
     public String uploadFile(MultipartFile file) throws IOException {
