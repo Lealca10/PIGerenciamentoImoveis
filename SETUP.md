@@ -66,21 +66,15 @@ No repositório `Lealca10/PIGerenciamentoImoveis`, ir em:
 
 ## Passo 4: Fazer o primeiro deploy
 
-Duas opções:
+O bootstrap e os manifests Kubernetes são mantidos no repositório
+`KairoHenriqueTI/TCS-BluVagas`, em `infra/kubernetes/imoveis`. Eles devem ser
+aplicados antes do primeiro deploy automático.
 
-### a) Manual (primeira vez)
-```bash
-kubectl apply -f k8s/namespace.yaml      # se não existir
-kubectl apply -f k8s/serviceaccounts.yaml # se não existir
-kubectl apply -f k8s/postgres.yaml        # somente bootstrap do banco
-kubectl apply -f k8s/backend.yaml
-kubectl apply -f k8s/ingress.yaml
-```
+O workflow deste repositório atualiza somente a imagem do deployment `backend`.
+Mudanças no banco, PVC, frontend e Ingress devem ser feitas no repositório de
+infraestrutura, com backup e revisão prévia.
 
-O workflow não reaplica `k8s/postgres.yaml`. Mudanças no banco e no PVC devem
-ser executadas manualmente, com backup e revisão prévia.
-
-### b) Automático (GitHub Actions)
+### Deploy automático (GitHub Actions)
 Após configurar o secret `AWS_ROLE_ARN`:
 1. Dar push na branch `main` do repositório
 2. Ou ir em **Actions → Deploy to EKS → Run workflow**
@@ -113,11 +107,11 @@ Assume role IAM via OIDC
   ↓
 Login no ECR
   ↓
-Build & Push Docker image (tag: sha do commit + "latest")
+Build & Push Docker image (tag: SHA do commit)
   ↓
 Update kubeconfig (EKS)
   ↓
-kubectl apply do backend e ingress (com a nova imagem)
+kubectl set image no deployment backend existente
   ↓
 Validação do rollout e do endpoint de health
 ```
@@ -129,6 +123,6 @@ Validação do rollout e do endpoint de health
 | Arquivo | Descrição |
 |---|---|
 | `.github/workflows/deploy.yml` | Workflow principal |
-| `k8s/postgres.yaml` | Deployment + PVC + Service do PostgreSQL |
-| `k8s/backend.yaml` | Deployment + Service do Spring Boot |
-| `k8s/ingress.yaml` | Ingress ALB (mesmo grupo do TCS) |
+
+Os manifests ficam no repositório `KairoHenriqueTI/TCS-BluVagas`, em
+`infra/kubernetes/imoveis`.
